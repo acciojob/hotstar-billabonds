@@ -29,35 +29,34 @@ public class WebSeriesService {
         // Use function written in Repository Layer for the same
         // Don't forget to save the production and web-series Repo
 
-       if(webSeriesRepository.findBySeriesName(webSeriesEntryDto.getSeriesName()) != null) {
-           throw new Exception("Series is already present");
-       }
-
-        ProductionHouse productionHouse = productionHouseRepository.findById(webSeriesEntryDto.getProductionHouseId()).get();
+        if(webSeriesRepository.findBySeriesName(webSeriesEntryDto.getSeriesName()) != null){
+            throw new Exception("Series is already present");
+        }
 
         WebSeries webSeries = new WebSeries();
         webSeries.setSeriesName(webSeriesEntryDto.getSeriesName());
         webSeries.setAgeLimit(webSeriesEntryDto.getAgeLimit());
         webSeries.setRating(webSeriesEntryDto.getRating());
         webSeries.setSubscriptionType(webSeriesEntryDto.getSubscriptionType());
-        webSeries.setProductionHouse(productionHouse);
 
-        productionHouse.getWebSeriesList().add(webSeries);
+        ProductionHouse productionHouse = productionHouseRepository.findById(webSeriesEntryDto.getProductionHouseId()).get();
+
         List<WebSeries> webSeriesList = productionHouse.getWebSeriesList();
+        webSeriesList.add(webSeries);
 
-        double avgRating = 0.0;
-
-        for(WebSeries series : webSeriesList){
-            avgRating += series.getRating();
+        double sum = 0.0;
+        for(WebSeries webSeries1 : webSeriesList) {
+            sum+=webSeries.getRating();
         }
 
-        double newRating = avgRating/webSeriesList.size();
+        double newRating = sum/webSeriesList.size();
         productionHouse.setRatings(newRating);
+        webSeries.setProductionHouse(productionHouse);
 
-        webSeriesRepository.save(webSeries);
         productionHouseRepository.save(productionHouse);
 
-        return webSeries.getId();
+        int id = webSeriesRepository.save(webSeries).getId();
+        return id;
     }
 
 }
