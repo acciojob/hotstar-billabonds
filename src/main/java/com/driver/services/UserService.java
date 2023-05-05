@@ -50,11 +50,10 @@ public class UserService {
                 count++;
             }
             else if(userSubscriptionType == SubscriptionType.PRO && series.getSubscriptionType() == SubscriptionType.PRO
-                                && series.getAgeLimit() <= user.getAge()) {
+                    || series.getSubscriptionType() == SubscriptionType.BASIC && series.getAgeLimit() <= user.getAge()) {
                 count++;
             }
-            else if(userSubscriptionType == SubscriptionType.ELITE && series.getSubscriptionType() == SubscriptionType.ELITE
-                    && series.getAgeLimit() <= user.getAge()){
+            else if(userSubscriptionType == SubscriptionType.ELITE && series.getAgeLimit() <= user.getAge()){
                 count++;
             }
 
