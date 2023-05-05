@@ -13,9 +13,15 @@ public class ProductionHouseService {
     @Autowired
     ProductionHouseRepository productionHouseRepository;
 
+    // -----------------------------------------------------------------------------------------
+                                                                                        // 1st API - done
+
     public Integer addProductionHouseToDb(ProductionHouseEntryDto productionHouseEntryDto){
 
-        return  null;
+        ProductionHouse productionHouse = new ProductionHouse(productionHouseEntryDto.getName());
+        productionHouseRepository.save(productionHouse);
+
+        return  productionHouse.getId();
     }
 
 

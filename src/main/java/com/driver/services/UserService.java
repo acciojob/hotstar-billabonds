@@ -21,20 +21,36 @@ public class UserService {
     @Autowired
     WebSeriesRepository webSeriesRepository;
 
-
+    // -----------------------------------------------------------------------------------------
+                                                                                    // 1st API - done
     public Integer addUser(User user){
 
-        //Jut simply add the user to the Db and return the userId returned by the repository
-        return null;
+        // Just simply add the user to the Db and return the userId returned by the repository
+        userRepository.save(user);
+        return user.getId();
     }
 
+                                                                                    // 2nd API - done
     public Integer getAvailableCountOfWebSeriesViewable(Integer userId){
 
-        //Return the count of all webSeries that a user can watch based on his ageLimit and subscriptionType
-        //Hint: Take out all the Webseries from the WebRepository
+        // Return the count of all webSeries that a user can watch based on his ageLimit and subscriptionType
+        // Hint: Take out all the Web-series from the WebRepository
 
+        int count = 0;
 
-        return null;
+        User user = userRepository.findById(userId).get();
+
+        List<WebSeries> webSeriesList = webSeriesRepository.findAll();
+
+        for(WebSeries series : webSeriesList)
+        {
+            if(series.getSubscriptionType() == user.getSubscription().getSubscriptionType()
+                                                            && series.getAgeLimit() <= user.getAge()){
+                count++;
+            }
+        }
+
+        return count;
     }
 
 
