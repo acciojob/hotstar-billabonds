@@ -29,38 +29,38 @@ public class WebSeriesService {
         // Use function written in Repository Layer for the same
         // Don't forget to save the production and web-series Repo
 
-
-       WebSeries webSeries = webSeriesRepository.findBySeriesName(webSeriesEntryDto.getSeriesName());
-
-       if(webSeries != null)
+       if(webSeriesRepository.findBySeriesName(webSeriesEntryDto.getSeriesName()) != null) {
            throw new Exception("Series is already present");
-
-       WebSeries webSeries1 = new WebSeries();
-        webSeries1.setSeriesName(webSeriesEntryDto.getSeriesName());
-        webSeries1.setAgeLimit(webSeriesEntryDto.getAgeLimit());
-        webSeries1.setRating(webSeriesEntryDto.getRating());
-        webSeries1.setSubscriptionType(webSeriesEntryDto.getSubscriptionType());
+       }
 
         ProductionHouse productionHouse = productionHouseRepository.findById(webSeriesEntryDto.getProductionHouseId()).get();
-        List<WebSeries> webSeriesList = productionHouse.getWebSeriesList();
 
+        WebSeries webSeries = new WebSeries();
+        webSeries.setSeriesName(webSeriesEntryDto.getSeriesName());
+        webSeries.setAgeLimit(webSeriesEntryDto.getAgeLimit());
+        webSeries.setRating(webSeriesEntryDto.getRating());
+        webSeries.setSubscriptionType(webSeriesEntryDto.getSubscriptionType());
+        webSeries.setProductionHouse(productionHouse);
+
+        List<WebSeries> webSeriesList = productionHouse.getWebSeriesList();
         webSeriesList.add(webSeries);
 
         int size = webSeriesList.size();
         double avgRating = 0;
+        double totalWebSeries = productionHouse.getWebSeriesList().size();
 
         for(WebSeries series : webSeriesList){
             avgRating += series.getRating();
         }
 
-        productionHouse.setRatings(avgRating/(size * 1.0));
+        productionHouse.setRatings(avgRating/totalWebSeries);
         productionHouse.setWebSeriesList(webSeriesList);
-        webSeries1.setProductionHouse(productionHouse);
+        webSeries.setProductionHouse(productionHouse);
 
-        webSeriesRepository.save(webSeries1);
+        webSeriesRepository.save(webSeries);
         productionHouseRepository.save(productionHouse);
 
-        return webSeries1.getId();
+        return webSeries.getId();
     }
 
 }

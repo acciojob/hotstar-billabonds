@@ -41,13 +41,23 @@ public class UserService {
         User user = userRepository.findById(userId).get();
 
         List<WebSeries> webSeriesList = webSeriesRepository.findAll();
+        SubscriptionType userSubscriptionType = user.getSubscription().getSubscriptionType();
 
         for(WebSeries series : webSeriesList)
         {
-            if(series.getSubscriptionType() == user.getSubscription().getSubscriptionType()
-                                                            && series.getAgeLimit() <= user.getAge()){
+            if(userSubscriptionType == SubscriptionType.BASIC && series.getSubscriptionType() == SubscriptionType.BASIC
+                                                              && series.getAgeLimit() <= user.getAge()){
                 count++;
             }
+            else if(userSubscriptionType == SubscriptionType.PRO && series.getSubscriptionType() == SubscriptionType.PRO
+                                && series.getAgeLimit() <= user.getAge()) {
+                count++;
+            }
+            else if(userSubscriptionType == SubscriptionType.ELITE && series.getSubscriptionType() == SubscriptionType.ELITE
+                    && series.getAgeLimit() <= user.getAge()){
+                count++;
+            }
+
         }
 
         return count;
