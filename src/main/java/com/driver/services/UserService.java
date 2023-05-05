@@ -38,7 +38,7 @@ public class UserService {
 
         Integer count = 0;
 
-        User user = userRepository.findById(userId).get();
+        User user = userRepository.findById(userId).get();.
 
         List<WebSeries> webSeriesList = webSeriesRepository.findAll();
 

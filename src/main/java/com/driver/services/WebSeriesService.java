@@ -30,12 +30,16 @@ public class WebSeriesService {
         // Don't forget to save the production and web-series Repo
 
 
-        if(isWebSeriesExist(webSeriesEntryDto.getSeriesName())) {
-            throw new Exception("Series is already present");
-        }
+       WebSeries webSeries = webSeriesRepository.findBySeriesName(webSeriesEntryDto.getSeriesName());
 
-        WebSeries webSeries = new WebSeries(webSeriesEntryDto.getSeriesName(),webSeriesEntryDto.getAgeLimit(),
-                                                webSeriesEntryDto.getRating(),webSeriesEntryDto.getSubscriptionType());
+       if(webSeries != null)
+           throw new Exception("Series is already present");
+
+       WebSeries webSeries1 = new WebSeries();
+        webSeries1.setSeriesName(webSeriesEntryDto.getSeriesName());
+        webSeries1.setAgeLimit(webSeriesEntryDto.getAgeLimit());
+        webSeries1.setRating(webSeriesEntryDto.getRating());
+        webSeries1.setSubscriptionType(webSeriesEntryDto.getSubscriptionType());
 
         ProductionHouse productionHouse = productionHouseRepository.findById(webSeriesEntryDto.getProductionHouseId()).get();
         List<WebSeries> webSeriesList = productionHouse.getWebSeriesList();
@@ -49,24 +53,14 @@ public class WebSeriesService {
             avgRating += series.getRating();
         }
 
-        productionHouse.setRatings(avgRating/size);
+        productionHouse.setRatings(avgRating/(size * 1.0));
         productionHouse.setWebSeriesList(webSeriesList);
-        webSeries.setProductionHouse(productionHouse);
+        webSeries1.setProductionHouse(productionHouse);
 
-        webSeriesRepository.save(webSeries);
+        webSeriesRepository.save(webSeries1);
         productionHouseRepository.save(productionHouse);
 
-
-        return webSeries.getId();
-    }
-
-        // Function used in 1st API
-    public boolean isWebSeriesExist(String name){
-
-        if(webSeriesRepository.findBySeriesName(name) != null)
-            return true;
-
-        return false;
+        return webSeries1.getId();
     }
 
 }
