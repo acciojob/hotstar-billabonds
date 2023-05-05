@@ -40,11 +40,11 @@ public class SubscriptionService {
         int totalAmount = 0;
 
         if(subscriptionEntryDto.getSubscriptionType() == SubscriptionType.ELITE)
-            totalAmount = 1000;
+            totalAmount = 1000 + 350 * subscription.getNoOfScreensSubscribed();
         else if(subscriptionEntryDto.getSubscriptionType() == SubscriptionType.PRO)
-            totalAmount = 800;
+            totalAmount = 800 + 250 * subscription.getNoOfScreensSubscribed();
         else
-            totalAmount = 500;
+            totalAmount = 500 + 200 * subscription.getNoOfScreensSubscribed();
 
         subscription.setTotalAmountPaid(totalAmount);
 
@@ -56,7 +56,7 @@ public class SubscriptionService {
         subscriptionRepository.save(subscription);
         userRepository.save(user);
 
-        return totalAmount;
+        return user.getSubscription().getTotalAmountPaid();
     }
 
                                                                                         // 2nd API - done
@@ -84,6 +84,8 @@ public class SubscriptionService {
         }
         else
             throw new Exception("Already the best Subscription");
+
+        userRepository.save(user);
 
         return difference;
     }

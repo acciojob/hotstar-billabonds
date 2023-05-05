@@ -30,8 +30,9 @@ public class WebSeriesService {
         // Don't forget to save the production and web-series Repo
 
 
-        if(isWebSeriesExist(webSeriesEntryDto.getSeriesName()))
+        if(isWebSeriesExist(webSeriesEntryDto.getSeriesName())) {
             throw new Exception("Series is already present");
+        }
 
         WebSeries webSeries = new WebSeries(webSeriesEntryDto.getSeriesName(),webSeriesEntryDto.getAgeLimit(),
                                                 webSeriesEntryDto.getRating(),webSeriesEntryDto.getSubscriptionType());
