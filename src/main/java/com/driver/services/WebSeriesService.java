@@ -43,7 +43,7 @@ public class WebSeriesService {
         webSeriesList.add(webSeries);
 
         int size = webSeriesList.size();
-        int avgRating = 0;
+        double avgRating = 0;
 
         for(WebSeries series : webSeriesList){
             avgRating += series.getRating();
@@ -63,7 +63,7 @@ public class WebSeriesService {
         // Function used in 1st API
     public boolean isWebSeriesExist(String name){
 
-        if(webSeriesRepository.findBySeriesName(name).equals(name))
+        if(webSeriesRepository.findBySeriesName(name) != null)
             return true;
 
         return false;

@@ -72,15 +72,17 @@ public class SubscriptionService {
 
         if(user.getSubscription().getSubscriptionType() == SubscriptionType.BASIC)
         {
-            difference = 800 - user.getSubscription().getTotalAmountPaid();
+            difference = (800 + 250 * user.getSubscription().getNoOfScreensSubscribed() )- user.getSubscription().getTotalAmountPaid();
             user.getSubscription().setSubscriptionType(SubscriptionType.PRO);
-            user.getSubscription().setNoOfScreensSubscribed(250);
+            user.getSubscription().setStartSubscriptionDate(new Date());
+            user.getSubscription().setTotalAmountPaid(800 + 250 * user.getSubscription().getNoOfScreensSubscribed());
         }
         else if(user.getSubscription().getSubscriptionType() == SubscriptionType.PRO){
 
-            difference = 1000 - user.getSubscription().getTotalAmountPaid();
+            difference = (1000 + 350 * user.getSubscription().getNoOfScreensSubscribed()) - user.getSubscription().getTotalAmountPaid();
             user.getSubscription().setSubscriptionType(SubscriptionType.ELITE);
-            user.getSubscription().setNoOfScreensSubscribed(350);
+            user.getSubscription().setStartSubscriptionDate(new Date());
+            user.getSubscription().setTotalAmountPaid(1000 + 350 * user.getSubscription().getNoOfScreensSubscribed());
         }
         else
             throw new Exception("Already the best Subscription");
